@@ -18,6 +18,8 @@ cpio: install
 test: install
 	rm -rf tmp-test; CORTEX_STATE=$$(pwd)/tmp-test timeout 7 rootfs/sbin/cortex || true
 	test -s tmp-test/state.json && test -s tmp-test/journal.jsonl
+cactus-download:
+	sh scripts/fetch_cactus.sh
 eval: install
 	python3 scripts/eval.py
 clean:

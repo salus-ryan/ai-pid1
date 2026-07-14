@@ -56,15 +56,25 @@ CORTEX_SOCK=/run/cortex-model.sock /sbin/cortex
 
 Allowed actions are controlled by `/etc/cortex/policy.json`.
 
+## Cactus / Needle assets
+
+Bootstrap downloads Cactus + Needle source into `third_party/` and small Needle HF assets into `third_party/needle-hf/`.
+
+```sh
+make cactus-download
+```
+
+Set `AI_PID1_CACTUS_FULL=1` to also download full model weights (`model.safetensors`, `needle.pkl`).
+
 ## Eval
 
 ```sh
-make eval
+make cactus-download eval
 # or
 ./eval.sh
 ```
 
-The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, and bad-model-output fallback. Results are written to `eval-results.json`.
+The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, and the Cactus decider shim. Results are written to `eval-results.json`.
 
 ## Package
 

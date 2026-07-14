@@ -23,6 +23,19 @@ def eval_case(name, actions=None, raw=None, rc=0, expect=None, policy=None):
         if journal.exists(): rows=[json.loads(x) for x in journal.read_text().splitlines() if x.strip()]
         ok=expect(rows,r)
         return {'name':name,'ok':ok,'rows':rows,'rc':r.returncode,'stderr':r.stderr[-500:]}
+def cactus_shim_case():
+    with tempfile.TemporaryDirectory(prefix='cortex-eval-') as td:
+        st=Path(td)/'state'; st.mkdir(); pol=Path(td)/'policy.json'; pol.write_text(json.dumps(POLICY))
+        env=os.environ|{'CORTEX_STATE':str(st),'CORTEX_POLICY':str(pol),'CORTEX_ONCE':'1','CORTEX_DECIDER':str(ROOT/'scripts/cactus_decider.py')}
+        r=run([str(BIN)], env=env, timeout=10)
+        rows=[json.loads(x) for x in (st/'journal.jsonl').read_text().splitlines() if x.strip()]
+        return {'name':'cactus decider shim emits safe action','ok':len(rows)==1 and rows[0]['allowed'] and rows[0]['action']['why']=='cactus-shim-heartbeat','rows':rows,'rc':r.returncode,'stderr':r.stderr[-500:]}
+def cactus_assets_case():
+    hf=ROOT/'third_party/needle-hf'
+    files=['MANIFEST.json','README.md','config.json','tokenizer.model']
+    ok=all((hf/f).exists() and (hf/f).stat().st_size>0 for f in files)
+    return {'name':'cactus/needle assets downloaded','ok':ok,'rows':[], 'rc':0, 'stderr':'' if ok else 'run: make cactus-download'}
+
 def main():
     build()
     cases=[
@@ -33,6 +46,8 @@ def main():
       eval_case('path traversal log denied', actions=[{'tool':'log','arg':'../../etc/passwd','why':'attack'}], expect=lambda rows,r: len(rows)==1 and not rows[0]['allowed']),
       eval_case('max actions truncates', actions=[{'tool':'verify','arg':'true','why':str(i)} for i in range(9)], expect=lambda rows,r: len(rows)==3 and all(x['allowed'] for x in rows)),
       eval_case('bad json falls back to builtin', raw='not-json', expect=lambda rows,r: r.returncode==0 and any(x['action']['why']=='heartbeat' for x in rows)),
+      cactus_shim_case(),
+      cactus_assets_case(),
     ]
     passed=sum(c['ok'] for c in cases)
     print(f'cortex eval: {passed}/{len(cases)} passed')

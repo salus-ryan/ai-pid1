@@ -3,3 +3,4 @@
 /rootfs.cpio.gz
 /cortex-rs/target
 /tmp-test
+/third_party
