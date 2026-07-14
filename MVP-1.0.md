@@ -14,6 +14,16 @@ This repository now produces a testable native-AI PID1 prototype.
 - USB boot tree / optional GRUB rescue ISO builder
 - Eval suite and MVP check target
 
+## Fast test path on Windows
+
+PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/salus-ryan/ai-pid1/master/bootstrap-windows.ps1 | iex
+```
+
+This installs/uses WSL Ubuntu and runs the Linux bootstrap inside it.
+
 ## Fast test path on x86_64 Linux/WSL
 
 ```sh

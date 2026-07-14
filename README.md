@@ -20,8 +20,16 @@ kernel -> /init PID1
 
 ## Build
 
+Linux/macOS/Termux:
+
 ```sh
 curl -fsSL https://raw.githubusercontent.com/salus-ryan/ai-pid1/master/bootstrap.sh | sh
+```
+
+Windows PowerShell bootstrap, including WSL install/use:
+
+```powershell
+irm https://raw.githubusercontent.com/salus-ryan/ai-pid1/master/bootstrap-windows.ps1 | iex
 ```
 
 Mobile-safe:
