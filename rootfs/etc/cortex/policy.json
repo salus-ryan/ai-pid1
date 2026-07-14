@@ -1,0 +1,1 @@
+{"allow_tools":["verify","start","stop","restart","log"],"allow_services":["net","storage"],"max_actions":3,"loop_secs":5,"require_verify":false}
