@@ -41,6 +41,28 @@ b=master/bootstrap.sh
 curl -fsSL "$u/$r/$b" | sh
 ```
 
+## Atomic Mail bridge
+
+Atomic Mail webhooks/WebSockets are not live yet, so this repo includes a polling bridge that behaves like a webhook source:
+
+```sh
+# print new messages as JSON
+./scripts/atomic_mail_bridge.py
+
+# or POST each new message to your endpoint
+ATOMIC_MAIL_WEBHOOK_URL=https://example.com/hook ./scripts/atomic_mail_bridge.py
+
+# one-shot test
+./scripts/atomic_mail_bridge.py --once
+```
+
+Configure:
+
+```sh
+ATOMIC_MAIL_POLL_SECONDS=30
+ATOMIC_MAIL_CREDENTIALS_DIR=$PWD/.atomicmail
+```
+
 ## Cortex AI hook
 
 Cortex is the safety wrapper. `/sbin/cactus-modeld` is the model sidecar. A model may propose JSON actions, but Cortex validates them before execution.
