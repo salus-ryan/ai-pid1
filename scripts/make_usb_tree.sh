@@ -6,7 +6,7 @@ K="${AI_PID1_KERNEL:-}"
 say(){ printf '%s\n' "[usb-tree] $*"; }
 find_kernel(){
   [ -n "$K" ] && [ -f "$K" ] && { printf '%s\n' "$K"; return 0; }
-  for x in /boot/vmlinuz-$(uname -r 2>/dev/null) /boot/vmlinuz /boot/bzImage "$ROOT/bzImage" "$ROOT/vmlinuz"; do
+  for x in "$ROOT/kernels/${AI_PID1_KERNEL_ARCH:-x86_64}/vmlinuz" /boot/vmlinuz-$(uname -r 2>/dev/null) /boot/vmlinuz /boot/bzImage "$ROOT/bzImage" "$ROOT/vmlinuz"; do
     [ -f "$x" ] && { printf '%s\n' "$x"; return 0; }
   done
   return 1

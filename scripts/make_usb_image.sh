@@ -5,6 +5,7 @@ TREE="${AI_PID1_USB_TREE:-$ROOT/ai-pid1-usb}"
 ISO="${AI_PID1_USB_ISO:-$ROOT/ai-pid1-usb.iso}"
 say(){ printf '%s\n' "[usb-image] $*"; }
 sh "$ROOT/scripts/make_usb_tree.sh"
+host="$(uname -m 2>/dev/null || echo unknown)"; if [ "$host" != x86_64 ] && [ "${AI_PID1_ALLOW_CROSS_USB:-0}" != 1 ]; then say "SKIP image: host-built binaries are $host but default USB kernel is x86_64. Build on x86_64 Linux for MVP-1.0, or set AI_PID1_ALLOW_CROSS_USB=1 if you cross-built userspace."; exit 0; fi
 if [ -e "$TREE/boot/vmlinuz.MISSING" ]; then
   say "SKIP image: missing kernel. Set AI_PID1_KERNEL=/path/to/vmlinuz"
   exit 0

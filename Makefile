@@ -19,7 +19,7 @@ cpio: install busybox
 	cd rootfs && find . | cpio -H newc -o | gzip -9 > ../rootfs.cpio.gz
 boot-smoke: cpio
 	sh scripts/boot_smoke.sh
-usb-tree: cpio
+usb-tree: kernel cpio
 	sh scripts/make_usb_tree.sh
 usb-image: usb-tree
 	sh scripts/make_usb_image.sh
@@ -28,6 +28,8 @@ test: install
 	test -s tmp-test/state.json && test -s tmp-test/journal.jsonl
 busybox:
 	sh scripts/bundle_busybox.sh
+kernel:
+	sh scripts/fetch_kernel.sh
 cactus-download:
 	sh scripts/fetch_cactus.sh
 eval: install

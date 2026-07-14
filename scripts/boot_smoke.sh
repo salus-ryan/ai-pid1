@@ -9,6 +9,7 @@ if command -v unshare >/dev/null 2>&1 && [ "${AI_PID1_UNSHARE:-0}" = 1 ]; then
 fi
 K="${AI_PID1_KERNEL:-$ROOT/bzImage}"
 if command -v qemu-system-x86_64 >/dev/null 2>&1 && [ -f "$K" ]; then
+  host="$(uname -m 2>/dev/null || echo unknown)"; if [ "$host" != x86_64 ] && [ "${AI_PID1_ALLOW_CROSS_BOOT:-0}" != 1 ]; then say "SKIP qemu: host-built init/cortex are $host, kernel is x86_64. Build on x86_64 Linux or set AI_PID1_ALLOW_CROSS_BOOT=1 if cross-built."; exit 0; fi
   LOG="$ROOT/boot-smoke.log"; rm -f "$LOG"
   say "qemu x86_64 kernel=$K"
   timeout 20 qemu-system-x86_64 -m 256M -kernel "$K" -initrd "$ROOT/rootfs.cpio.gz" -append 'console=ttyS0 rdinit=/init panic=1' -nographic >"$LOG" 2>&1 || true

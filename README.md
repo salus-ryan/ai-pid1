@@ -102,10 +102,24 @@ ai-pid1-usb/
 ai-pid1-usb.tar.gz
 ```
 
-If a kernel is not auto-detected, provide one:
+Fetch a known Linux kernel automatically:
+
+```sh
+make kernel
+```
+
+Or provide one:
 
 ```sh
 AI_PID1_KERNEL=/path/to/vmlinuz make usb-tree
+```
+
+Fastest MVP-1.0 path is an x86_64 Linux/WSL host:
+
+```sh
+git clone https://github.com/salus-ryan/ai-pid1.git
+cd ai-pid1
+make kernel cactus-download eval boot-smoke usb-image
 ```
 
 Build a dd-able GRUB rescue ISO when `grub-mkrescue` + `xorriso` are installed:

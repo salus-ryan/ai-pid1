@@ -8,25 +8,25 @@ say(){ printf '%s\n' "[ai-pid1] $*"; }
 run(){ say "$*"; "$@"; }
 os(){ case "$(uname -s 2>/dev/null || echo unknown)" in Linux*) echo linux;; Darwin*) echo mac;; MINGW*|MSYS*|CYGWIN*) echo windows-sh;; *) echo unknown;; esac; }
 install_deps(){
-  missing=""; for x in git make cc cargo rustc cpio gzip python3; do need "$x" || missing="$missing $x"; done
+  missing=""; for x in git make cc cargo rustc cpio gzip python3 curl; do need "$x" || missing="$missing $x"; done
   [ -z "$missing" ] && return 0
   say "missing:$missing"
   if [ -n "${PREFIX:-}" ] && echo "${PREFIX:-}" | grep -q 'com.termux'; then
-    run pkg update -y; run pkg install -y git make clang rust cpio gzip python
+    run pkg update -y; run pkg install -y git make clang rust cpio gzip python curl
   elif need apt-get; then
     SUDO=""; [ "$(id -u)" != 0 ] && SUDO=sudo
-    run $SUDO apt-get update; run $SUDO apt-get install -y git make clang rustc cargo cpio gzip python3
+    run $SUDO apt-get update; run $SUDO apt-get install -y git make clang rustc cargo cpio gzip python3 curl qemu-system-x86 grub-common xorriso || run $SUDO apt-get install -y git make clang rustc cargo cpio gzip python3 curl
   elif need dnf; then
     SUDO=""; [ "$(id -u)" != 0 ] && SUDO=sudo
-    run $SUDO dnf install -y git make clang rust cargo cpio gzip python3
+    run $SUDO dnf install -y git make clang rust cargo cpio gzip python3 curl qemu-system-x86 grub2-tools-extra xorriso || run $SUDO dnf install -y git make clang rust cargo cpio gzip python3 curl
   elif need pacman; then
     SUDO=""; [ "$(id -u)" != 0 ] && SUDO=sudo
-    run $SUDO pacman -Sy --needed --noconfirm git make clang rust cpio gzip python
+    run $SUDO pacman -Sy --needed --noconfirm git make clang rust cpio gzip python curl qemu-system-x86 grub xorriso || run $SUDO pacman -Sy --needed --noconfirm git make clang rust cpio gzip python curl
   elif need apk; then
     SUDO=""; [ "$(id -u)" != 0 ] && SUDO=sudo
-    run $SUDO apk add git make clang rust cargo cpio gzip musl-dev python3
+    run $SUDO apk add git make clang rust cargo cpio gzip musl-dev python3 curl qemu-system-x86_64 grub-bios xorriso || run $SUDO apk add git make clang rust cargo cpio gzip musl-dev python3 curl
   elif need brew; then
-    run brew install git make llvm rust cpio gzip python || true
+    run brew install git make llvm rust cpio gzip python qemu xorriso || true
   else
     say "No supported package manager found. Install: git make C compiler rust/cargo cpio gzip"
   fi
@@ -46,10 +46,12 @@ main(){
   install_deps
   clone_or_update
   fetch_cactus
+  run make kernel
   run make busybox
   run make test
   run make eval
   run make cpio
+  AI_PID1_KERNEL="$PWD/kernels/${AI_PID1_KERNEL_ARCH:-x86_64}/vmlinuz"; export AI_PID1_KERNEL
   run make boot-smoke
   say "OK: $(pwd)/rootfs.cpio.gz"
 }
