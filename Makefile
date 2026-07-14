@@ -18,6 +18,8 @@ cpio: install
 test: install
 	rm -rf tmp-test; CORTEX_STATE=$$(pwd)/tmp-test timeout 7 rootfs/sbin/cortex || true
 	test -s tmp-test/state.json && test -s tmp-test/journal.jsonl
+eval: install
+	python3 scripts/eval.py
 clean:
 	rm -f rootfs/init rootfs/sbin/cortex rootfs.cpio.gz
 	cd cortex-rs && cargo clean

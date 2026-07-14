@@ -1,0 +1,190 @@
+[
+  {
+    "name": "builtin emits allowed heartbeat",
+    "ok": true,
+    "rows": [
+      {
+        "action": {
+          "arg": "true",
+          "tool": "verify",
+          "why": "heartbeat"
+        },
+        "allowed": true,
+        "err": "",
+        "out": "",
+        "rc": 0,
+        "t": 1784031460
+      },
+      {
+        "action": {
+          "arg": "echo watchdog-missing >/dev/console",
+          "tool": "verify",
+          "why": "diagnose"
+        },
+        "allowed": true,
+        "err": "/data/data/com.termux/files/usr/bin/sh: 1: cannot create /dev/console: Permission denied\n",
+        "out": "",
+        "rc": 2,
+        "t": 1784031460
+      }
+    ],
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "name": "allowed model verify executes",
+    "ok": true,
+    "rows": [
+      {
+        "action": {
+          "arg": "echo ok",
+          "tool": "verify",
+          "why": "test"
+        },
+        "allowed": true,
+        "err": "",
+        "out": "ok\n",
+        "rc": 0,
+        "t": 1784031460
+      }
+    ],
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "name": "unknown tool denied",
+    "ok": true,
+    "rows": [
+      {
+        "action": {
+          "arg": "id",
+          "tool": "shell",
+          "why": "attack"
+        },
+        "allowed": false,
+        "err": "policy-denied",
+        "out": "",
+        "rc": 126,
+        "t": 1784031460
+      }
+    ],
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "name": "disallowed service denied",
+    "ok": true,
+    "rows": [
+      {
+        "action": {
+          "arg": "sshd",
+          "tool": "restart",
+          "why": "attack"
+        },
+        "allowed": false,
+        "err": "policy-denied",
+        "out": "",
+        "rc": 126,
+        "t": 1784031460
+      }
+    ],
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "name": "path traversal log denied",
+    "ok": true,
+    "rows": [
+      {
+        "action": {
+          "arg": "../../etc/passwd",
+          "tool": "log",
+          "why": "attack"
+        },
+        "allowed": false,
+        "err": "policy-denied",
+        "out": "",
+        "rc": 126,
+        "t": 1784031460
+      }
+    ],
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "name": "max actions truncates",
+    "ok": true,
+    "rows": [
+      {
+        "action": {
+          "arg": "true",
+          "tool": "verify",
+          "why": "0"
+        },
+        "allowed": true,
+        "err": "",
+        "out": "",
+        "rc": 0,
+        "t": 1784031460
+      },
+      {
+        "action": {
+          "arg": "true",
+          "tool": "verify",
+          "why": "1"
+        },
+        "allowed": true,
+        "err": "",
+        "out": "",
+        "rc": 0,
+        "t": 1784031460
+      },
+      {
+        "action": {
+          "arg": "true",
+          "tool": "verify",
+          "why": "2"
+        },
+        "allowed": true,
+        "err": "",
+        "out": "",
+        "rc": 0,
+        "t": 1784031460
+      }
+    ],
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "name": "bad json falls back to builtin",
+    "ok": true,
+    "rows": [
+      {
+        "action": {
+          "arg": "true",
+          "tool": "verify",
+          "why": "heartbeat"
+        },
+        "allowed": true,
+        "err": "",
+        "out": "",
+        "rc": 0,
+        "t": 1784031460
+      },
+      {
+        "action": {
+          "arg": "echo watchdog-missing >/dev/console",
+          "tool": "verify",
+          "why": "diagnose"
+        },
+        "allowed": true,
+        "err": "/data/data/com.termux/files/usr/bin/sh: 1: cannot create /dev/console: Permission denied\n",
+        "out": "",
+        "rc": 2,
+        "t": 1784031460
+      }
+    ],
+    "rc": 0,
+    "stderr": ""
+  }
+]
