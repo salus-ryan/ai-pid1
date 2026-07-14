@@ -92,6 +92,13 @@ def usb_tree_case():
     ok=r.returncode==0 and all(x.exists() and x.stat().st_size>0 for x in checks)
     return {'name':'usb boot tree artifact builds','ok':ok,'rows':[], 'rc':r.returncode, 'stderr':(r.stdout+r.stderr)[-1000:]}
 
+
+def cortex_capsule_case():
+    r=run(['make','capsule'], cwd=ROOT, timeout=60)
+    cap=ROOT/'CORTEX_CAPSULE.json'
+    ok=r.returncode==0 and cap.exists() and 'cortex.boot-capsule.v1' in cap.read_text()
+    return {'name':'cortex boot capsule verifies','ok':ok,'rows':[], 'rc':r.returncode, 'stderr':(r.stdout+r.stderr)[-1000:]}
+
 def portable_usb_case():
     r=run(['make','portable-usb'], cwd=ROOT, timeout=240)
     tree=ROOT/'ai-cortex-usb'
@@ -115,7 +122,7 @@ def main():
       lambda: eval_case('tool timeout enforced', actions=[{'tool':'verify','arg':'sleep 5','why':'timeout'}], policy=POLICY|{'allow_verify_prefixes':['sleep '],'tool_timeout_secs':1}, expect=lambda rows,r: len(rows)==1 and rows[0]['allowed'] and rows[0]['rc']==124),
       lambda: eval_case('max actions truncates', actions=[{'tool':'verify','arg':'true','why':str(i)} for i in range(9)], expect=lambda rows,r: len(rows)==3 and all(x['allowed'] for x in rows)),
       lambda: eval_case('bad json falls back to builtin', raw='not-json', expect=lambda rows,r: r.returncode==0 and any(x['action']['why']=='heartbeat' for x in rows)),
-      cactus_shim_case, modeld_socket_case, needle_decider_fallback_case, needle_decider_mock_case, modeld_uses_needle_decider_case, cactus_assets_case, busybox_bundle_case, usb_tree_case, portable_usb_case]
+      cactus_shim_case, modeld_socket_case, needle_decider_fallback_case, needle_decider_mock_case, modeld_uses_needle_decider_case, cactus_assets_case, busybox_bundle_case, usb_tree_case, cortex_capsule_case, portable_usb_case]
     cases=[]
     for i,t in enumerate(tests,1):
         log(f'[eval] running {i}/{len(tests)}...')

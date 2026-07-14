@@ -17,6 +17,7 @@
 /kernels
 /mvp-check.log
 /boot-smoke.log
+/CORTEX_CAPSULE.json
 /artifacts
 __pycache__/
 *.pyc

@@ -1,0 +1,48 @@
+{
+  "action_schema": {
+    "arg": "policy-bounded string",
+    "tool": "verify|start|stop|restart|log",
+    "why": "human/model-readable reason"
+  },
+  "artifacts": {
+    "ai-cortex-usb.img": null,
+    "ai-cortex-usb.tar.gz": "4ac263d63bd8dcc1a14c5536b97887f5e6f19d583e6a256fb449179f669a7ae0",
+    "ai-pid1-usb.iso": null,
+    "rootfs.cpio.gz": "275895248cccbc6ebaa747a19b1dc67fb9547931eaf350c12eae711d0a94ab3c"
+  },
+  "boot_graph": [
+    "firmware",
+    "EFI/GRUB",
+    "Linux kernel",
+    "/init PID1",
+    "/sbin/cactus-modeld",
+    "/sbin/cortex",
+    "bounded tools"
+  ],
+  "capsule_sha256": "74ad7226ff371fc78c7124624d8124423f69a0a5ae290b62e7bad908475f80a9",
+  "consent_boundary": "runs only when firmware/user explicitly boots this media; no host-OS autorun or persistence",
+  "generated_at": 1784054629,
+  "git": {
+    "commit": "81141d6d179b68e87ca3d2655c09969ce44ac158",
+    "dirty": true
+  },
+  "hashes": {
+    "cortex-rs/src/bin/cactus-modeld.rs": "cf12a6d498332466c777a9960b0abc678b19985b097ecb2ddc1aed7f21aa2c9a",
+    "cortex-rs/src/main.rs": "445ebd8c09a86f0b5e343fea4edb45c57131a86c4c48cc2778609fe8e16cab3f",
+    "rootfs/etc/cortex/policy.json": "d62a645421242aff92db189fab30f2a44c142d4f5e9f393756999efaf86e6571",
+    "scripts/cactus_needle_decider.py": "405baec47f34d1023911adb1604159b95461428ec16166f5f90715e0908d364c",
+    "scripts/make_portable_usb.sh": "ec746bc8e1c24ee8f62a4b7c6efda2f3ff2bf447077aa8d876ffff3e0fd84ba6",
+    "src/init.c": "8258b58e6ee9e8c100d6e873f805ee704d2adf2544c71e63a47e70809135641d"
+  },
+  "name": "ai-pid1-cortex",
+  "safety_invariants": [
+    "model is never PID1",
+    "PID1 does no inference",
+    "model output is untrusted",
+    "policy validates before execution",
+    "denied actions are journaled",
+    "tool execution is timeout-bounded"
+  ],
+  "schema": "cortex.boot-capsule.v1",
+  "thesis": "deterministic PID1 supervises a local AI sidecar; model proposes, Cortex validates, every action receives a journaled receipt"
+}

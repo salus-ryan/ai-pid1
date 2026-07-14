@@ -5,10 +5,11 @@ init: src/init.c
 	$(CC) $(CFLAGS) -o rootfs/init $<
 cortex:
 	cd cortex-rs && cargo build --release
-install: all
+install: all capsule
 	install -D cortex-rs/target/release/cortex rootfs/sbin/cortex
 	install -D cortex-rs/target/release/cactus-modeld rootfs/sbin/cactus-modeld
 	install -D scripts/cactus_needle_decider.py rootfs/opt/cactus-needle-decider
+	install -D CORTEX_CAPSULE.json rootfs/etc/cortex/capsule.json
 	install -D src/watchdog.sh rootfs/sbin/watchdog
 	mkdir -p rootfs/etc/init.d
 	printf '#!/bin/sh\ntrue\n' > rootfs/etc/init.d/net; chmod +x rootfs/etc/init.d/net
@@ -33,6 +34,9 @@ test: install
 	test -s tmp-test/state.json && test -s tmp-test/journal.jsonl
 busybox:
 	sh scripts/bundle_busybox.sh
+capsule:
+	python3 scripts/gen_cortex_capsule.py >/dev/null
+	python3 scripts/verify_cortex_capsule.py CORTEX_CAPSULE.json
 kernel:
 	sh scripts/fetch_kernel.sh
 cactus-download:
@@ -44,6 +48,6 @@ eval: install
 mvp:
 	sh scripts/mvp_check.sh
 clean:
-	rm -f rootfs/init rootfs/sbin/cortex rootfs/sbin/cactus-modeld rootfs.cpio.gz ai-pid1-usb.tar.gz ai-pid1-usb.iso ai-cortex-usb.tar.gz ai-cortex-usb.img mvp-check.log boot-smoke.log
+	rm -f rootfs/init rootfs/sbin/cortex rootfs/sbin/cactus-modeld rootfs.cpio.gz ai-pid1-usb.tar.gz ai-pid1-usb.iso ai-cortex-usb.tar.gz ai-cortex-usb.img CORTEX_CAPSULE.json mvp-check.log boot-smoke.log
 	rm -rf ai-pid1-usb ai-cortex-usb
 	cd cortex-rs && cargo clean

@@ -14,6 +14,8 @@ mkdir -p "$OUT/EFI/BOOT" "$OUT/boot/grub" "$OUT/boot/x86_64" "$OUT/cortex/state"
 cp "$K" "$OUT/boot/x86_64/vmlinuz"
 cp "$ROOT/rootfs.cpio.gz" "$OUT/boot/x86_64/rootfs.cpio.gz"
 cp "$ROOT/rootfs/etc/cortex/policy.json" "$OUT/cortex/policy/policy.json" 2>/dev/null || true
+[ -f "$ROOT/CORTEX_CAPSULE.json" ] || (cd "$ROOT" && make capsule >/dev/null)
+cp "$ROOT/CORTEX_CAPSULE.json" "$OUT/cortex/CORTEX_CAPSULE.json"
 cat > "$OUT/boot/grub/grub.cfg" <<'EOF'
 set timeout=3
 set default=0
@@ -39,6 +41,7 @@ Layout:
   cortex/state               persistent state placeholder
   cortex/models              model asset placeholder
   cortex/policy              Cortex policy
+  cortex/CORTEX_CAPSULE.json Boot/action contract and artifact hashes
 
 If BOOTX64.EFI is missing, install grub tools and rerun make portable-usb.
 EOF

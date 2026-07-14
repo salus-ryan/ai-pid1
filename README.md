@@ -115,9 +115,25 @@ make cactus-download eval
 ./eval.sh
 ```
 
-The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, dangerous shell denial, per-tool timeout enforcement, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, Needle decider fallback/mock/delegation paths, BusyBox bundling, USB boot tree generation, and portable Cortex USB tree generation. Results are written to `eval-results.json`.
+The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, dangerous shell denial, per-tool timeout enforcement, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, Needle decider fallback/mock/delegation paths, BusyBox bundling, USB boot tree generation, Cortex Boot Capsule verification, and portable Cortex USB tree generation. Results are written to `eval-results.json`.
 
 See [`SECURITY.md`](SECURITY.md) for the consent-based boot and Cortex hardening model.
+
+## Novel primitive: Cortex Boot Capsule
+
+`make capsule` creates a machine-readable boot/action contract:
+
+```text
+CORTEX_CAPSULE.json
+```
+
+It records the boot graph, safety invariants, action schema, consent boundary, source/artifact hashes, and capsule hash. Portable USB builds include it at:
+
+```text
+cortex/CORTEX_CAPSULE.json
+```
+
+See [`NOVELTY.md`](NOVELTY.md).
 
 ## Portable USB-C AI-native OS
 
