@@ -13,7 +13,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784040123
+        "t": 1784040333
       },
       {
         "action": {
@@ -25,7 +25,7 @@
         "err": "/data/data/com.termux/files/usr/bin/sh: 1: cannot create /dev/console: Permission denied\n",
         "out": "",
         "rc": 2,
-        "t": 1784040123
+        "t": 1784040333
       }
     ],
     "rc": 0,
@@ -45,7 +45,7 @@
         "err": "",
         "out": "ok\n",
         "rc": 0,
-        "t": 1784040123
+        "t": 1784040333
       }
     ],
     "rc": 0,
@@ -65,7 +65,7 @@
         "err": "policy-denied",
         "out": "",
         "rc": 126,
-        "t": 1784040123
+        "t": 1784040333
       }
     ],
     "rc": 0,
@@ -85,7 +85,7 @@
         "err": "policy-denied",
         "out": "",
         "rc": 126,
-        "t": 1784040123
+        "t": 1784040333
       }
     ],
     "rc": 0,
@@ -105,7 +105,7 @@
         "err": "policy-denied",
         "out": "",
         "rc": 126,
-        "t": 1784040123
+        "t": 1784040333
       }
     ],
     "rc": 0,
@@ -125,7 +125,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784040123
+        "t": 1784040333
       },
       {
         "action": {
@@ -137,7 +137,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784040123
+        "t": 1784040333
       },
       {
         "action": {
@@ -149,7 +149,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784040123
+        "t": 1784040333
       }
     ],
     "rc": 0,
@@ -169,7 +169,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784040123
+        "t": 1784040333
       },
       {
         "action": {
@@ -181,7 +181,7 @@
         "err": "/data/data/com.termux/files/usr/bin/sh: 1: cannot create /dev/console: Permission denied\n",
         "out": "",
         "rc": 2,
-        "t": 1784040123
+        "t": 1784040333
       }
     ],
     "rc": 0,
@@ -201,7 +201,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784040124
+        "t": 1784040333
       }
     ],
     "rc": 0,
@@ -221,7 +221,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784040124
+        "t": 1784040334
       }
     ],
     "rc": 0,
@@ -267,7 +267,7 @@
         "err": "/data/data/com.termux/files/usr/bin/sh: 1: /etc/init.d/net: not found\n",
         "out": "",
         "rc": 127,
-        "t": 1784040124
+        "t": 1784040334
       }
     ],
     "rc": 0,
@@ -292,6 +292,13 @@
     "ok": true,
     "rows": [],
     "rc": 0,
-    "stderr": "ir -p rootfs/etc/init.d\nprintf '#!/bin/sh\\ntrue\\n' > rootfs/etc/init.d/net; chmod +x rootfs/etc/init.d/net\nprintf '#!/bin/sh\\ntrue\\n' > rootfs/etc/init.d/storage; chmod +x rootfs/etc/init.d/storage\nsh scripts/bundle_busybox.sh\n[busybox] no upstream static busybox for aarch64 here; downloading x86_64 for qemu/x86 images\n[busybox] download https://busybox.net/downloads/binaries/1.35.0-x86_64-linux-musl/busybox\n[busybox] installed /data/data/com.termux/files/home/ai-pid1/rootfs/bin/busybox\ncd rootfs && find . | cpio -H newc -o | gzip -9 > ../rootfs.cpio.gz\nsh scripts/make_usb_tree.sh\n[usb-tree] kernel=/data/data/com.termux/files/home/ai-pid1/kernels/x86_64/vmlinuz\n[usb-tree] OK tree=/data/data/com.termux/files/home/ai-pid1/ai-pid1-usb tar=/data/data/com.termux/files/home/ai-pid1/ai-pid1-usb.tar.gz\nmake[1]: Leaving directory '/data/data/com.termux/files/home/ai-pid1'\n    Finished `release` profile [optimized] target(s) in 0.01s\n    Finished `release` profile [optimized] target(s) in 0.02s\n"
+    "stderr": "tus-needle-decider\ninstall -D src/watchdog.sh rootfs/sbin/watchdog\nmkdir -p rootfs/etc/init.d\nprintf '#!/bin/sh\\ntrue\\n' > rootfs/etc/init.d/net; chmod +x rootfs/etc/init.d/net\nprintf '#!/bin/sh\\ntrue\\n' > rootfs/etc/init.d/storage; chmod +x rootfs/etc/init.d/storage\nsh scripts/bundle_busybox.sh\n[busybox] no upstream static busybox for aarch64 here; downloading x86_64 for qemu/x86 images\n[busybox] download https://busybox.net/downloads/binaries/1.35.0-x86_64-linux-musl/busybox\n[busybox] installed /data/data/com.termux/files/home/ai-pid1/rootfs/bin/busybox\ncd rootfs && find . | cpio -H newc -o | gzip -9 > ../rootfs.cpio.gz\nsh scripts/make_usb_tree.sh\n[usb-tree] kernel=/data/data/com.termux/files/home/ai-pid1/kernels/x86_64/vmlinuz\n[usb-tree] OK tree=/data/data/com.termux/files/home/ai-pid1/ai-pid1-usb tar=/data/data/com.termux/files/home/ai-pid1/ai-pid1-usb.tar.gz\n    Finished `release` profile [optimized] target(s) in 0.01s\n    Finished `release` profile [optimized] target(s) in 0.01s\n"
+  },
+  {
+    "name": "portable cortex usb tree builds",
+    "ok": true,
+    "rows": [],
+    "rc": 0,
+    "stderr": "sh scripts/fetch_kernel.sh\n[kernel] exists /data/data/com.termux/files/home/ai-pid1/kernels/x86_64/vmlinuz\ncc -Os -s -o rootfs/init src/init.c\ncd cortex-rs && cargo build --release\ninstall -D cortex-rs/target/release/cortex rootfs/sbin/cortex\ninstall -D cortex-rs/target/release/cactus-modeld rootfs/sbin/cactus-modeld\ninstall -D scripts/cactus_needle_decider.py rootfs/opt/cactus-needle-decider\ninstall -D src/watchdog.sh rootfs/sbin/watchdog\nmkdir -p rootfs/etc/init.d\nprintf '#!/bin/sh\\ntrue\\n' > rootfs/etc/init.d/net; chmod +x rootfs/etc/init.d/net\nprintf '#!/bin/sh\\ntrue\\n' > rootfs/etc/init.d/storage; chmod +x rootfs/etc/init.d/storage\nsh scripts/bundle_busybox.sh\n[busybox] no upstream static busybox for aarch64 here; downloading x86_64 for qemu/x86 images\n[busybox] download https://busybox.net/downloads/binaries/1.35.0-x86_64-linux-musl/busybox\n[busybox] installed /data/data/com.termux/files/home/ai-pid1/rootfs/bin/busybox\ncd rootfs && find . | cpio -H newc -o | gzip -9 > ../rootfs.cpio.gz\nsh scripts/make_portable_usb.sh\n[portable-usb] SKIP BOOTX64.EFI: install grub-mkstandalone/grub-efi tools\n[portable-usb] tree=/data/data/com.termux/files/home/ai-pid1/ai-cortex-usb tar=/data/data/com.termux/files/home/ai-pid1/ai-cortex-usb.tar.gz\n[portable-usb] SKIP image: need mtools (mformat,mcopy) and BOOTX64.EFI. Tree/tar are ready.\n    Finished `release` profile [optimized] target(s) in 0.01s\n    Finished `release` profile [optimized] target(s) in 0.01s\n"
   }
 ]

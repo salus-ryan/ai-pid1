@@ -91,6 +91,14 @@ def usb_tree_case():
     tree=ROOT/'ai-pid1-usb'; checks=[tree/'boot/ai-pid1.cpio.gz', tree/'boot/grub/grub.cfg', ROOT/'ai-pid1-usb.tar.gz']
     ok=r.returncode==0 and all(x.exists() and x.stat().st_size>0 for x in checks)
     return {'name':'usb boot tree artifact builds','ok':ok,'rows':[], 'rc':r.returncode, 'stderr':(r.stdout+r.stderr)[-1000:]}
+
+def portable_usb_case():
+    r=run(['make','portable-usb'], cwd=ROOT, timeout=240)
+    tree=ROOT/'ai-cortex-usb'
+    checks=[tree/'boot/x86_64/vmlinuz', tree/'boot/x86_64/rootfs.cpio.gz', tree/'boot/grub/grub.cfg', tree/'cortex/state', ROOT/'ai-cortex-usb.tar.gz']
+    ok=r.returncode==0 and all(x.exists() for x in checks)
+    return {'name':'portable cortex usb tree builds','ok':ok,'rows':[], 'rc':r.returncode, 'stderr':(r.stdout+r.stderr)[-1500:]}
+
 def busybox_bundle_case():
     bb=ROOT/'rootfs/bin/busybox'; sh=ROOT/'rootfs/bin/sh'
     ok=bb.exists() and bb.stat().st_size>0 and os.path.lexists(sh)
@@ -105,7 +113,7 @@ def main():
       lambda: eval_case('path traversal log denied', actions=[{'tool':'log','arg':'../../etc/passwd','why':'attack'}], expect=lambda rows,r: len(rows)==1 and not rows[0]['allowed']),
       lambda: eval_case('max actions truncates', actions=[{'tool':'verify','arg':'true','why':str(i)} for i in range(9)], expect=lambda rows,r: len(rows)==3 and all(x['allowed'] for x in rows)),
       lambda: eval_case('bad json falls back to builtin', raw='not-json', expect=lambda rows,r: r.returncode==0 and any(x['action']['why']=='heartbeat' for x in rows)),
-      cactus_shim_case, modeld_socket_case, needle_decider_fallback_case, needle_decider_mock_case, modeld_uses_needle_decider_case, cactus_assets_case, busybox_bundle_case, usb_tree_case]
+      cactus_shim_case, modeld_socket_case, needle_decider_fallback_case, needle_decider_mock_case, modeld_uses_needle_decider_case, cactus_assets_case, busybox_bundle_case, usb_tree_case, portable_usb_case]
     cases=[]
     for i,t in enumerate(tests,1):
         log(f'[eval] running {i}/{len(tests)}...')

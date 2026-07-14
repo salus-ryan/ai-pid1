@@ -26,6 +26,8 @@ usb-image: usb-tree
 export-artifacts:
 	sh scripts/export_windows_artifacts.sh
 windows-artifacts: mvp export-artifacts
+portable-usb: kernel cpio
+	sh scripts/make_portable_usb.sh
 test: install
 	rm -rf tmp-test; CORTEX_STATE=$$(pwd)/tmp-test timeout 7 rootfs/sbin/cortex || true
 	test -s tmp-test/state.json && test -s tmp-test/journal.jsonl
@@ -42,6 +44,6 @@ eval: install
 mvp:
 	sh scripts/mvp_check.sh
 clean:
-	rm -f rootfs/init rootfs/sbin/cortex rootfs/sbin/cactus-modeld rootfs.cpio.gz ai-pid1-usb.tar.gz ai-pid1-usb.iso mvp-check.log boot-smoke.log
-	rm -rf ai-pid1-usb
+	rm -f rootfs/init rootfs/sbin/cortex rootfs/sbin/cactus-modeld rootfs.cpio.gz ai-pid1-usb.tar.gz ai-pid1-usb.iso ai-cortex-usb.tar.gz ai-cortex-usb.img mvp-check.log boot-smoke.log
+	rm -rf ai-pid1-usb ai-cortex-usb
 	cd cortex-rs && cargo clean

@@ -115,7 +115,25 @@ make cactus-download eval
 ./eval.sh
 ```
 
-The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, Needle decider fallback/mock/delegation paths, BusyBox bundling, and USB boot tree generation. Results are written to `eval-results.json`.
+The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, Needle decider fallback/mock/delegation paths, BusyBox bundling, USB boot tree generation, and portable Cortex USB tree generation. Results are written to `eval-results.json`.
+
+## Portable USB-C AI-native OS
+
+Build the consent-based portable Cortex OS tree:
+
+```sh
+make portable-usb
+```
+
+Outputs:
+
+```text
+ai-cortex-usb/
+ai-cortex-usb.tar.gz
+ai-cortex-usb.img   # only when GRUB EFI + mtools are available
+```
+
+This does not autorun and does not affect a running host OS. A device must be explicitly booted from the USB drive by firmware/boot menu. Current target is x86_64 UEFI. ARM64/Raspberry Pi/Apple Silicon need separate boot builds.
 
 ## USB / drive boot artifacts
 
