@@ -9,9 +9,10 @@ kernel -> /init PID1
   ├─ reap children
   ├─ launch net/storage hooks
   ├─ launch watchdog
+  ├─ launch /sbin/cactus-modeld
   └─ launch/restart /sbin/cortex
         ├─ observe /proc
-        ├─ ask optional model/decider
+        ├─ ask cactus-modeld over /run/cortex-model.sock
         ├─ validate bounded actions against /etc/cortex/policy.json
         ├─ execute allowlisted verify/start/stop/restart/log
         └─ journal to /var/lib/cortex/journal.jsonl
@@ -34,24 +35,25 @@ curl -fsSL "$u/$r/$b" | sh
 
 ## Cortex AI hook
 
-Cortex is the safety wrapper. A model may propose JSON actions, but Cortex validates them before execution.
+Cortex is the safety wrapper. `/sbin/cactus-modeld` is the model sidecar. A model may propose JSON actions, but Cortex validates them before execution.
 
-Via command:
+Run the model sidecar:
 
 ```sh
-CORTEX_DECIDER='/opt/needle-decider' /sbin/cortex
+CORTEX_MODEL_SOCK=/run/cortex-model.sock /sbin/cactus-modeld
+CORTEX_SOCK=/run/cortex-model.sock /sbin/cortex
+```
+
+`cactus-modeld` can delegate to a native Cactus/Needle command:
+
+```sh
+CORTEX_CACTUS_CMD='/opt/cactus-needle-decider' /sbin/cactus-modeld
 ```
 
 The command receives state JSON on stdin and must return:
 
 ```json
 [{"tool":"verify","arg":"true","why":"heartbeat"}]
-```
-
-Via Unix socket:
-
-```sh
-CORTEX_SOCK=/run/cortex-model.sock /sbin/cortex
 ```
 
 Allowed actions are controlled by `/etc/cortex/policy.json`.

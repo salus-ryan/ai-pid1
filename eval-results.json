@@ -13,7 +13,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784031621
+        "t": 1784031751
       },
       {
         "action": {
@@ -25,7 +25,7 @@
         "err": "/data/data/com.termux/files/usr/bin/sh: 1: cannot create /dev/console: Permission denied\n",
         "out": "",
         "rc": 2,
-        "t": 1784031621
+        "t": 1784031751
       }
     ],
     "rc": 0,
@@ -45,7 +45,7 @@
         "err": "",
         "out": "ok\n",
         "rc": 0,
-        "t": 1784031621
+        "t": 1784031751
       }
     ],
     "rc": 0,
@@ -65,7 +65,7 @@
         "err": "policy-denied",
         "out": "",
         "rc": 126,
-        "t": 1784031621
+        "t": 1784031751
       }
     ],
     "rc": 0,
@@ -85,7 +85,7 @@
         "err": "policy-denied",
         "out": "",
         "rc": 126,
-        "t": 1784031621
+        "t": 1784031751
       }
     ],
     "rc": 0,
@@ -105,7 +105,7 @@
         "err": "policy-denied",
         "out": "",
         "rc": 126,
-        "t": 1784031621
+        "t": 1784031751
       }
     ],
     "rc": 0,
@@ -125,7 +125,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784031621
+        "t": 1784031751
       },
       {
         "action": {
@@ -137,7 +137,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784031621
+        "t": 1784031751
       },
       {
         "action": {
@@ -149,7 +149,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784031621
+        "t": 1784031752
       }
     ],
     "rc": 0,
@@ -169,7 +169,7 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784031621
+        "t": 1784031752
       },
       {
         "action": {
@@ -181,7 +181,7 @@
         "err": "/data/data/com.termux/files/usr/bin/sh: 1: cannot create /dev/console: Permission denied\n",
         "out": "",
         "rc": 2,
-        "t": 1784031621
+        "t": 1784031752
       }
     ],
     "rc": 0,
@@ -201,7 +201,27 @@
         "err": "",
         "out": "",
         "rc": 0,
-        "t": 1784031622
+        "t": 1784031752
+      }
+    ],
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "name": "cortex talks to cactus-modeld over unix socket",
+    "ok": true,
+    "rows": [
+      {
+        "action": {
+          "arg": "true",
+          "tool": "verify",
+          "why": "modeld-heartbeat"
+        },
+        "allowed": true,
+        "err": "",
+        "out": "",
+        "rc": 0,
+        "t": 1784031752
       }
     ],
     "rc": 0,

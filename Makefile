@@ -7,6 +7,7 @@ cortex:
 	cd cortex-rs && cargo build --release
 install: all
 	install -D cortex-rs/target/release/cortex rootfs/sbin/cortex
+	install -D cortex-rs/target/release/cactus-modeld rootfs/sbin/cactus-modeld
 	install -D src/watchdog.sh rootfs/sbin/watchdog
 	mkdir -p rootfs/etc/init.d
 	printf '#!/bin/sh\ntrue\n' > rootfs/etc/init.d/net; chmod +x rootfs/etc/init.d/net
@@ -23,5 +24,5 @@ cactus-download:
 eval: install
 	python3 scripts/eval.py
 clean:
-	rm -f rootfs/init rootfs/sbin/cortex rootfs.cpio.gz
+	rm -f rootfs/init rootfs/sbin/cortex rootfs/sbin/cactus-modeld rootfs.cpio.gz
 	cd cortex-rs && cargo clean

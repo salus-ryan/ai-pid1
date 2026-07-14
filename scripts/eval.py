@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, os, shutil, subprocess, sys, tempfile, textwrap
+import json, os, shutil, subprocess, sys, tempfile, textwrap, time
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 BIN=ROOT/'rootfs/sbin/cortex'
@@ -30,6 +30,25 @@ def cactus_shim_case():
         r=run([str(BIN)], env=env, timeout=10)
         rows=[json.loads(x) for x in (st/'journal.jsonl').read_text().splitlines() if x.strip()]
         return {'name':'cactus decider shim emits safe action','ok':len(rows)==1 and rows[0]['allowed'] and rows[0]['action']['why']=='cactus-shim-heartbeat','rows':rows,'rc':r.returncode,'stderr':r.stderr[-500:]}
+
+def modeld_socket_case():
+    with tempfile.TemporaryDirectory(prefix='cortex-eval-') as td:
+        sock=str(Path(td)/'model.sock'); st=Path(td)/'state'; st.mkdir(); pol=Path(td)/'policy.json'; pol.write_text(json.dumps(POLICY))
+        md=subprocess.Popen([str(ROOT/'rootfs/sbin/cactus-modeld')], env=os.environ|{'CORTEX_MODEL_SOCK':sock}, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        try:
+            for _ in range(20):
+                if Path(sock).exists(): break
+                time.sleep(0.1)
+            env=os.environ|{'CORTEX_STATE':str(st),'CORTEX_POLICY':str(pol),'CORTEX_ONCE':'1','CORTEX_SOCK':sock}
+            r=run([str(BIN)], env=env, timeout=10)
+            rows=[json.loads(x) for x in (st/'journal.jsonl').read_text().splitlines() if x.strip()]
+            ok=len(rows)==1 and rows[0]['allowed'] and rows[0]['action']['why']=='modeld-heartbeat'
+            return {'name':'cortex talks to cactus-modeld over unix socket','ok':ok,'rows':rows,'rc':r.returncode,'stderr':r.stderr[-500:]}
+        finally:
+            md.terminate();
+            try: md.wait(timeout=2)
+            except subprocess.TimeoutExpired: md.kill()
+
 def cactus_assets_case():
     hf=ROOT/'third_party/needle-hf'
     files=['MANIFEST.json','README.md','config.json','tokenizer.model']
@@ -47,6 +66,7 @@ def main():
       eval_case('max actions truncates', actions=[{'tool':'verify','arg':'true','why':str(i)} for i in range(9)], expect=lambda rows,r: len(rows)==3 and all(x['allowed'] for x in rows)),
       eval_case('bad json falls back to builtin', raw='not-json', expect=lambda rows,r: r.returncode==0 and any(x['action']['why']=='heartbeat' for x in rows)),
       cactus_shim_case(),
+      modeld_socket_case(),
       cactus_assets_case(),
     ]
     passed=sum(c['ok'] for c in cases)
