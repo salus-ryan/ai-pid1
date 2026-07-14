@@ -38,6 +38,8 @@ fetch_cactus(){
 clone_or_update(){
   if [ -d .git ] && git remote -v 2>/dev/null | grep -q 'salus-ryan/ai-pid1'; then return 0; fi
   if [ -d "$DIR/.git" ]; then cd "$DIR"; run git pull --ff-only || true; return 0; fi
+  cd "$HOME"
+  if [ -d "$DIR/.git" ]; then cd "$DIR"; run git pull --ff-only || true; return 0; fi
   run git clone --branch "$BRANCH" "$REPO" "$DIR"; cd "$DIR"
 }
 main(){
