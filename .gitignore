@@ -1,0 +1,5 @@
+/rootfs/init
+/rootfs/sbin/cortex
+/rootfs.cpio.gz
+/cortex-rs/target
+/tmp-test
