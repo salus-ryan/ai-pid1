@@ -23,6 +23,9 @@ usb-tree: kernel cpio
 	sh scripts/make_usb_tree.sh
 usb-image: usb-tree
 	sh scripts/make_usb_image.sh
+export-artifacts:
+	sh scripts/export_windows_artifacts.sh
+windows-artifacts: mvp export-artifacts
 test: install
 	rm -rf tmp-test; CORTEX_STATE=$$(pwd)/tmp-test timeout 7 rootfs/sbin/cortex || true
 	test -s tmp-test/state.json && test -s tmp-test/journal.jsonl
@@ -34,6 +37,8 @@ cactus-download:
 	sh scripts/fetch_cactus.sh
 eval: install
 	python3 scripts/eval.py
+.:
+	@true
 mvp:
 	sh scripts/mvp_check.sh
 clean:

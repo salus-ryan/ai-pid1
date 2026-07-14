@@ -15,13 +15,13 @@ install_deps(){
     run pkg update -y; run pkg install -y git make clang rust cpio gzip python curl
   elif need apt-get; then
     SUDO=""; [ "$(id -u)" != 0 ] && SUDO=sudo
-    run $SUDO apt-get update; run $SUDO apt-get install -y git make clang rustc cargo cpio gzip python3 curl qemu-system-x86 grub-common xorriso || run $SUDO apt-get install -y git make clang rustc cargo cpio gzip python3 curl
+    run $SUDO apt-get update; run $SUDO apt-get install -y git make clang rustc cargo cpio gzip python3 curl qemu-system-x86 grub-common xorriso mtools || run $SUDO apt-get install -y git make clang rustc cargo cpio gzip python3 curl
   elif need dnf; then
     SUDO=""; [ "$(id -u)" != 0 ] && SUDO=sudo
-    run $SUDO dnf install -y git make clang rust cargo cpio gzip python3 curl qemu-system-x86 grub2-tools-extra xorriso || run $SUDO dnf install -y git make clang rust cargo cpio gzip python3 curl
+    run $SUDO dnf install -y git make clang rust cargo cpio gzip python3 curl qemu-system-x86 grub2-tools-extra xorriso mtools || run $SUDO dnf install -y git make clang rust cargo cpio gzip python3 curl
   elif need pacman; then
     SUDO=""; [ "$(id -u)" != 0 ] && SUDO=sudo
-    run $SUDO pacman -Sy --needed --noconfirm git make clang rust cpio gzip python curl qemu-system-x86 grub xorriso || run $SUDO pacman -Sy --needed --noconfirm git make clang rust cpio gzip python curl
+    run $SUDO pacman -Sy --needed --noconfirm git make clang rust cpio gzip python curl qemu-system-x86 grub xorriso mtools || run $SUDO pacman -Sy --needed --noconfirm git make clang rust cpio gzip python curl
   elif need apk; then
     SUDO=""; [ "$(id -u)" != 0 ] && SUDO=sudo
     run $SUDO apk add git make clang rust cargo cpio gzip musl-dev python3 curl qemu-system-x86_64 grub-bios xorriso || run $SUDO apk add git make clang rust cargo cpio gzip musl-dev python3 curl
