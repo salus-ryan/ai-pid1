@@ -34,7 +34,9 @@ cactus-download:
 	sh scripts/fetch_cactus.sh
 eval: install
 	python3 scripts/eval.py
+mvp:
+	sh scripts/mvp_check.sh
 clean:
-	rm -f rootfs/init rootfs/sbin/cortex rootfs/sbin/cactus-modeld rootfs.cpio.gz ai-pid1-usb.tar.gz ai-pid1-usb.iso
+	rm -f rootfs/init rootfs/sbin/cortex rootfs/sbin/cactus-modeld rootfs.cpio.gz ai-pid1-usb.tar.gz ai-pid1-usb.iso mvp-check.log boot-smoke.log
 	rm -rf ai-pid1-usb
 	cd cortex-rs && cargo clean

@@ -119,6 +119,12 @@ Fastest MVP-1.0 path is an x86_64 Linux/WSL host:
 ```sh
 git clone https://github.com/salus-ryan/ai-pid1.git
 cd ai-pid1
+make mvp
+```
+
+Equivalent expanded path:
+
+```sh
 make kernel cactus-download eval boot-smoke usb-image
 ```
 
