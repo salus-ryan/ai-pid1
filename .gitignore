@@ -1,5 +1,9 @@
 /rootfs/init
 /rootfs/sbin/cortex
+/rootfs/sbin/cactus-modeld
+/rootfs/bin
+/rootfs/sbin/halt
+/rootfs/sbin/init
 /rootfs.cpio.gz
 /cortex-rs/target
 /tmp-test

@@ -46,9 +46,11 @@ main(){
   install_deps
   clone_or_update
   fetch_cactus
+  run make busybox
   run make test
   run make eval
   run make cpio
+  run make boot-smoke
   say "OK: $(pwd)/rootfs.cpio.gz"
 }
 main "$@"

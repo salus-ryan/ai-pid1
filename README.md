@@ -76,7 +76,29 @@ make cactus-download eval
 ./eval.sh
 ```
 
-The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, and the Cactus decider shim. Results are written to `eval-results.json`.
+The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, and BusyBox bundling. Results are written to `eval-results.json`.
+
+## Boot smoke / BusyBox
+
+Bundle a minimal userspace:
+
+```sh
+make busybox
+```
+
+Package and smoke-test:
+
+```sh
+make boot-smoke
+```
+
+If `qemu-system-x86_64` and a kernel are available, set:
+
+```sh
+AI_PID1_KERNEL=/path/to/bzImage make boot-smoke
+```
+
+Otherwise the smoke test verifies initramfs contents and gzip integrity.
 
 ## Package
 

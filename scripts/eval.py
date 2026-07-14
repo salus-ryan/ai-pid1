@@ -55,6 +55,12 @@ def cactus_assets_case():
     ok=all((hf/f).exists() and (hf/f).stat().st_size>0 for f in files)
     return {'name':'cactus/needle assets downloaded','ok':ok,'rows':[], 'rc':0, 'stderr':'' if ok else 'run: make cactus-download'}
 
+def busybox_bundle_case():
+    bb=ROOT/'rootfs/bin/busybox'
+    sh=ROOT/'rootfs/bin/sh'
+    ok=bb.exists() and bb.stat().st_size>0 and os.path.lexists(sh)
+    return {'name':'busybox bundled into rootfs','ok':ok,'rows':[], 'rc':0, 'stderr':'' if ok else 'run: make busybox'}
+
 def main():
     build()
     cases=[
@@ -68,6 +74,7 @@ def main():
       cactus_shim_case(),
       modeld_socket_case(),
       cactus_assets_case(),
+      busybox_bundle_case(),
     ]
     passed=sum(c['ok'] for c in cases)
     print(f'cortex eval: {passed}/{len(cases)} passed')
