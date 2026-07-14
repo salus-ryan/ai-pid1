@@ -92,6 +92,14 @@ def modeld_uses_needle_decider_case():
             try: md.wait(timeout=2)
             except subprocess.TimeoutExpired: md.kill()
 
+
+def usb_tree_case():
+    r=run(['make','usb-tree'], cwd=ROOT, timeout=120)
+    tree=ROOT/'ai-pid1-usb'
+    checks=[tree/'boot/ai-pid1.cpio.gz', tree/'boot/grub/grub.cfg', ROOT/'ai-pid1-usb.tar.gz']
+    ok=r.returncode==0 and all(x.exists() and x.stat().st_size>0 for x in checks)
+    return {'name':'usb boot tree artifact builds','ok':ok,'rows':[], 'rc':r.returncode, 'stderr':(r.stdout+r.stderr)[-1000:]}
+
 def busybox_bundle_case():
     bb=ROOT/'rootfs/bin/busybox'
     sh=ROOT/'rootfs/bin/sh'
@@ -115,6 +123,7 @@ def main():
       modeld_uses_needle_decider_case(),
       cactus_assets_case(),
       busybox_bundle_case(),
+      usb_tree_case(),
     ]
     passed=sum(c['ok'] for c in cases)
     print(f'cortex eval: {passed}/{len(cases)} passed')

@@ -85,7 +85,37 @@ make cactus-download eval
 ./eval.sh
 ```
 
-The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, Needle decider fallback/mock/delegation paths, and BusyBox bundling. Results are written to `eval-results.json`.
+The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, Needle decider fallback/mock/delegation paths, BusyBox bundling, and USB boot tree generation. Results are written to `eval-results.json`.
+
+## USB / drive boot artifacts
+
+Build a USB boot tree and tarball:
+
+```sh
+make usb-tree
+```
+
+Outputs:
+
+```text
+ai-pid1-usb/
+ai-pid1-usb.tar.gz
+```
+
+If a kernel is not auto-detected, provide one:
+
+```sh
+AI_PID1_KERNEL=/path/to/vmlinuz make usb-tree
+```
+
+Build a dd-able GRUB rescue ISO when `grub-mkrescue` + `xorriso` are installed:
+
+```sh
+AI_PID1_KERNEL=/path/to/vmlinuz make usb-image
+sudo dd if=ai-pid1-usb.iso of=/dev/sdX bs=4M status=progress conv=fsync
+```
+
+Be careful: `/dev/sdX` must be the whole USB drive, not your system disk.
 
 ## Boot smoke / BusyBox
 

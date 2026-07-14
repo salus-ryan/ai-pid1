@@ -19,6 +19,10 @@ cpio: install busybox
 	cd rootfs && find . | cpio -H newc -o | gzip -9 > ../rootfs.cpio.gz
 boot-smoke: cpio
 	sh scripts/boot_smoke.sh
+usb-tree: cpio
+	sh scripts/make_usb_tree.sh
+usb-image: usb-tree
+	sh scripts/make_usb_image.sh
 test: install
 	rm -rf tmp-test; CORTEX_STATE=$$(pwd)/tmp-test timeout 7 rootfs/sbin/cortex || true
 	test -s tmp-test/state.json && test -s tmp-test/journal.jsonl
@@ -29,5 +33,6 @@ cactus-download:
 eval: install
 	python3 scripts/eval.py
 clean:
-	rm -f rootfs/init rootfs/sbin/cortex rootfs/sbin/cactus-modeld rootfs.cpio.gz
+	rm -f rootfs/init rootfs/sbin/cortex rootfs/sbin/cactus-modeld rootfs.cpio.gz ai-pid1-usb.tar.gz ai-pid1-usb.iso
+	rm -rf ai-pid1-usb
 	cd cortex-rs && cargo clean
