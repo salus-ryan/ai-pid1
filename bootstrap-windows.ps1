@@ -12,12 +12,20 @@ if(!(Has wsl)){
   Say "If Windows asked for reboot, reboot, open Ubuntu once, then rerun this script."
   exit 0
 }
-$distros = (wsl -l -q) -join "`n"
-if($distros -notmatch [regex]::Escape($Distro)){
+function Get-WslDistros {
+  try {
+    return @((wsl.exe -l -q) | ForEach-Object { ($_ -replace "`0", "").Trim() } | Where-Object { $_.Length -gt 0 })
+  } catch { return @() }
+}
+$distros = Get-WslDistros
+if($distros -notcontains $Distro){
   Say "Installing WSL distro: $Distro"
   wsl --install -d $Distro
-  Say "If install requested setup/reboot, finish it, then rerun this script."
-  exit 0
+  $distros = Get-WslDistros
+  if($distros -notcontains $Distro){
+    Say "Install/setup may still be finishing. Reboot if requested, open Ubuntu once, then rerun this script."
+    exit 0
+  }
 }
 Say "Running ai-pid1 Linux bootstrap inside WSL distro: $Distro"
 wsl -d $Distro -- bash -lc "set -e; if command -v curl >/dev/null 2>&1; then curl -fsSL $Repo | sh; else wget -qO- $Repo | sh; fi"
