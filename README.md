@@ -115,7 +115,9 @@ make cactus-download eval
 ./eval.sh
 ```
 
-The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, Needle decider fallback/mock/delegation paths, BusyBox bundling, USB boot tree generation, and portable Cortex USB tree generation. Results are written to `eval-results.json`.
+The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, dangerous shell denial, per-tool timeout enforcement, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, Needle decider fallback/mock/delegation paths, BusyBox bundling, USB boot tree generation, and portable Cortex USB tree generation. Results are written to `eval-results.json`.
+
+See [`SECURITY.md`](SECURITY.md) for the consent-based boot and Cortex hardening model.
 
 ## Portable USB-C AI-native OS
 

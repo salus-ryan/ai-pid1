@@ -111,6 +111,8 @@ def main():
       lambda: eval_case('unknown tool denied', actions=[{'tool':'shell','arg':'id','why':'attack'}], expect=lambda rows,r: len(rows)==1 and not rows[0]['allowed'] and rows[0]['rc']==126),
       lambda: eval_case('disallowed service denied', actions=[{'tool':'restart','arg':'sshd','why':'attack'}], expect=lambda rows,r: len(rows)==1 and not rows[0]['allowed']),
       lambda: eval_case('path traversal log denied', actions=[{'tool':'log','arg':'../../etc/passwd','why':'attack'}], expect=lambda rows,r: len(rows)==1 and not rows[0]['allowed']),
+      lambda: eval_case('dangerous verify shell denied', actions=[{'tool':'verify','arg':'echo ok; id','why':'attack'}], expect=lambda rows,r: len(rows)==1 and not rows[0]['allowed'] and rows[0]['rc']==126),
+      lambda: eval_case('tool timeout enforced', actions=[{'tool':'verify','arg':'sleep 5','why':'timeout'}], policy=POLICY|{'allow_verify_prefixes':['sleep '],'tool_timeout_secs':1}, expect=lambda rows,r: len(rows)==1 and rows[0]['allowed'] and rows[0]['rc']==124),
       lambda: eval_case('max actions truncates', actions=[{'tool':'verify','arg':'true','why':str(i)} for i in range(9)], expect=lambda rows,r: len(rows)==3 and all(x['allowed'] for x in rows)),
       lambda: eval_case('bad json falls back to builtin', raw='not-json', expect=lambda rows,r: r.returncode==0 and any(x['action']['why']=='heartbeat' for x in rows)),
       cactus_shim_case, modeld_socket_case, needle_decider_fallback_case, needle_decider_mock_case, modeld_uses_needle_decider_case, cactus_assets_case, busybox_bundle_case, usb_tree_case, portable_usb_case]

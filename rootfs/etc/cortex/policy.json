@@ -1,1 +1,10 @@
-{"allow_tools":["verify","start","stop","restart","log"],"allow_services":["net","storage"],"max_actions":3,"loop_secs":5,"require_verify":false}
+{
+  "allow_tools": ["verify", "start", "stop", "restart", "log"],
+  "allow_services": ["net", "storage"],
+  "allow_verify_prefixes": ["true", "echo ", "test ", "[ ", "ps", "cat /proc/", "tail "],
+  "max_actions": 3,
+  "loop_secs": 5,
+  "tool_timeout_secs": 8,
+  "max_arg_len": 240,
+  "require_verify": false
+}
