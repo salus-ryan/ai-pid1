@@ -8,6 +8,7 @@ cortex:
 install: all
 	install -D cortex-rs/target/release/cortex rootfs/sbin/cortex
 	install -D cortex-rs/target/release/cactus-modeld rootfs/sbin/cactus-modeld
+	install -D scripts/cactus_needle_decider.py rootfs/opt/cactus-needle-decider
 	install -D src/watchdog.sh rootfs/sbin/watchdog
 	mkdir -p rootfs/etc/init.d
 	printf '#!/bin/sh\ntrue\n' > rootfs/etc/init.d/net; chmod +x rootfs/etc/init.d/net

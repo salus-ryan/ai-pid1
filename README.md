@@ -44,10 +44,19 @@ CORTEX_MODEL_SOCK=/run/cortex-model.sock /sbin/cactus-modeld
 CORTEX_SOCK=/run/cortex-model.sock /sbin/cortex
 ```
 
-`cactus-modeld` can delegate to a native Cactus/Needle command:
+`cactus-modeld` delegates to the bundled Needle decider by default in PID1:
 
 ```sh
-CORTEX_CACTUS_CMD='/opt/cactus-needle-decider' /sbin/cactus-modeld
+CORTEX_CACTUS_CMD=/opt/cactus-needle-decider /sbin/cactus-modeld
+```
+
+For real Needle inference, download weights and provide Python/JAX Needle deps:
+
+```sh
+AI_PID1_CACTUS_FULL=1 make cactus-download
+CORTEX_NEEDLE_CHECKPOINT=$PWD/third_party/needle-hf/needle.pkl \
+CORTEX_CACTUS_CMD=$PWD/scripts/cactus_needle_decider.py \
+/sbin/cactus-modeld
 ```
 
 The command receives state JSON on stdin and must return:
@@ -76,7 +85,7 @@ make cactus-download eval
 ./eval.sh
 ```
 
-The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, and BusyBox bundling. Results are written to `eval-results.json`.
+The eval suite tests heartbeat fallback, model action execution, policy denial, service allowlists, path traversal denial, max-action truncation, bad-model-output fallback, Cactus asset presence, the Cactus decider shim, modeld socket IPC, Needle decider fallback/mock/delegation paths, and BusyBox bundling. Results are written to `eval-results.json`.
 
 ## Boot smoke / BusyBox
 

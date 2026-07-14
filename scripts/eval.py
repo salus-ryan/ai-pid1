@@ -55,6 +55,43 @@ def cactus_assets_case():
     ok=all((hf/f).exists() and (hf/f).stat().st_size>0 for f in files)
     return {'name':'cactus/needle assets downloaded','ok':ok,'rows':[], 'rc':0, 'stderr':'' if ok else 'run: make cactus-download'}
 
+
+def needle_decider_fallback_case():
+    with tempfile.TemporaryDirectory(prefix='cortex-eval-') as td:
+        r=run([str(ROOT/'scripts/cactus_needle_decider.py')], input=json.dumps({'ps':'ok'}), timeout=10)
+        try: acts=json.loads(r.stdout)
+        except Exception: acts=[]
+        ok=r.returncode==0 and acts and acts[0]['tool']=='verify' and acts[0]['arg']=='true'
+        return {'name':'needle decider safe fallback','ok':ok,'rows':acts,'rc':r.returncode,'stderr':r.stderr[-500:]}
+
+def needle_decider_mock_case():
+    env=os.environ|{'CORTEX_NEEDLE_MOCK':json.dumps([{'tool':'restart','arg':'net','why':'mock'}])}
+    r=run([str(ROOT/'scripts/cactus_needle_decider.py')], input=json.dumps({'ps':'net failed'}), env=env, timeout=10)
+    try: acts=json.loads(r.stdout)
+    except Exception: acts=[]
+    ok=r.returncode==0 and acts==[{'tool':'restart','arg':'net','why':'mock'}]
+    return {'name':'needle decider mock path returns actions','ok':ok,'rows':acts,'rc':r.returncode,'stderr':r.stderr[-500:]}
+
+def modeld_uses_needle_decider_case():
+    with tempfile.TemporaryDirectory(prefix='cortex-eval-') as td:
+        sock=str(Path(td)/'model.sock'); st=Path(td)/'state'; st.mkdir(); pol=Path(td)/'policy.json'; pol.write_text(json.dumps(POLICY))
+        cmd=str(ROOT/'scripts/cactus_needle_decider.py')
+        env_md=os.environ|{'CORTEX_MODEL_SOCK':sock,'CORTEX_CACTUS_CMD':cmd,'CORTEX_NEEDLE_MOCK':json.dumps([{'tool':'restart','arg':'net','why':'mock'}])}
+        md=subprocess.Popen([str(ROOT/'rootfs/sbin/cactus-modeld')], env=env_md, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        try:
+            for _ in range(20):
+                if Path(sock).exists(): break
+                time.sleep(0.1)
+            env=os.environ|{'CORTEX_STATE':str(st),'CORTEX_POLICY':str(pol),'CORTEX_ONCE':'1','CORTEX_SOCK':sock}
+            r=run([str(BIN)], env=env, timeout=10)
+            rows=[json.loads(x) for x in (st/'journal.jsonl').read_text().splitlines() if x.strip()]
+            ok=len(rows)==1 and rows[0]['allowed'] and rows[0]['action']['tool']=='restart' and rows[0]['action']['arg']=='net'
+            return {'name':'modeld delegates to needle decider command','ok':ok,'rows':rows,'rc':r.returncode,'stderr':r.stderr[-500:]}
+        finally:
+            md.terminate();
+            try: md.wait(timeout=2)
+            except subprocess.TimeoutExpired: md.kill()
+
 def busybox_bundle_case():
     bb=ROOT/'rootfs/bin/busybox'
     sh=ROOT/'rootfs/bin/sh'
@@ -73,6 +110,9 @@ def main():
       eval_case('bad json falls back to builtin', raw='not-json', expect=lambda rows,r: r.returncode==0 and any(x['action']['why']=='heartbeat' for x in rows)),
       cactus_shim_case(),
       modeld_socket_case(),
+      needle_decider_fallback_case(),
+      needle_decider_mock_case(),
+      modeld_uses_needle_decider_case(),
       cactus_assets_case(),
       busybox_bundle_case(),
     ]
